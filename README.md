@@ -361,37 +361,6 @@ graph LR
 
 ---
 
-## Ideas for Extensions
-
-### SAST Scanner Extensions
-- Support additional languages (Python, Java, Go)
-- GitHub App that comments on pull requests
-- Historical trend analysis and dashboards
-- Custom rules configuration
-- Report generation (PDF/HTML)
-- Integration with Jira/GitHub Issues for tracking
-- Severity threshold configuration (block on HIGH, warn on MEDIUM)
-
-### Pentest Extensions
-- Additional security tests (CORS, CSRF, XML injection, HTTP method testing)
-- Scheduled scanning with configurable intervals
-- Comparison between scans (what changed? new vulnerabilities?)
-- Multi-target testing (scan multiple APIs)
-- Webhook alerts (Slack, Discord, PagerDuty, email)
-- Compliance reports and dashboards
-- Rate limit configuration per target
-
-### Platform Ideas (Combining Both)
-- Single dashboard for both static and dynamic testing
-- Correlate findings (code issue → runtime vulnerability)
-- Complete CI/CD security pipeline
-- Security score/grade calculation
-- Multi-tenancy (multiple teams/projects)
-- User authentication and team management
-- Audit logging of all scans
-
----
-
 ## Project Requirements
 
 ### Must Have

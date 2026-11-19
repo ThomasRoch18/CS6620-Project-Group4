@@ -6,7 +6,7 @@ FN="${P}-notifier"
 SRC="$(cd "$(dirname "$0")/../lambdas/notifier" && pwd)"
 (cd "$SRC" && rm -f /tmp/notifier.zip && zip -q /tmp/notifier.zip handler.py)
 
-ENV_VARS="Variables={FINDINGS_TOPIC_ARN=$FINDINGS_TOPIC_ARN,DASHBOARD_URL=${DASHBOARD_URL:-}}"
+ENV_VARS="{\"Variables\":{\"FINDINGS_TOPIC_ARN\":\"$FINDINGS_TOPIC_ARN\",\"DASHBOARD_URL\":\"${DASHBOARD_URL:-}\"}}"
 if aws lambda get-function --function-name "$FN" >/dev/null 2>&1; then
   aws lambda update-function-code --function-name "$FN" --zip-file fileb:///tmp/notifier.zip >/dev/null
   aws lambda wait function-updated --function-name "$FN"

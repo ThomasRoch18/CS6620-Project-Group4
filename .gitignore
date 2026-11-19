@@ -17,3 +17,8 @@ override.tf.json
 .aws/
 .env
 .env.*
+setup/.state
+setup/.state.tmp
+.env
+__pycache__/
+*.zip

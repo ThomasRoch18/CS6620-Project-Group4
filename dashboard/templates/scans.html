@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Scan history{% endblock %}
+{% block head %}<meta http-equiv="refresh" content="10">{% endblock %}
+{% block content %}
+<h1>Scan history</h1>
+<p class="lede">Latest 50 scans for {{ team }}. This page refreshes every 10 seconds.</p>
+{% if scans %}
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Started</th><th>Type</th><th>Target</th><th>Status</th><th>High</th><th>Medium</th><th>Low</th></tr></thead>
+  <tbody>
+  {% for s in scans %}
+    <tr>
+      <td><a href="{{ url_for('scan_detail', scan_id=s.scanId) }}">{{ s.createdAt|replace('T', ' ')|replace('Z', '') }}</a></td>
+      <td>{{ 'Code' if s.type == 'SAST' else 'API' }}</td>
+      <td class="target">{{ s.target }}</td>
+      <td><span class="status status-{{ s.status|lower }}">{{ s.status|capitalize }}</span></td>
+      <td class="num {{ 'hit-high' if s|sev('HIGH') }}">{{ s|sev('HIGH') }}</td>
+      <td class="num">{{ s|sev('MEDIUM') }}</td>
+      <td class="num">{{ s|sev('LOW') }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">No scans yet. <a href="{{ url_for('index') }}">Start your first scan</a>.</p>
+{% endif %}
+{% endblock %}

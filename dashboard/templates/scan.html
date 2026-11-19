@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Scan {{ scan.scanId[:8] }}{% endblock %}
+{% block head %}{% if scan.status in ['QUEUED', 'RUNNING'] %}<meta http-equiv="refresh" content="5">{% endif %}{% endblock %}
+{% block content %}
+<h1>{{ 'Code check' if scan.type == 'SAST' else 'API test' }}</h1>
+<p class="lede target">{{ scan.target }}</p>
+
+{% set order = ['QUEUED', 'RUNNING', 'COMPLETE'] %}
+<ol class="track {{ 'track-failed' if scan.status == 'FAILED' }}" aria-label="Scan progress">
+  {% for step in order %}
+    {% set reached = scan.status == 'FAILED' and step != 'COMPLETE' or (scan.status in order and order.index(scan.status) >= loop.index0) %}
+    <li class="{{ 'done' if reached }} {{ 'current' if scan.status == step }}">{{ step|capitalize }}</li>
+  {% endfor %}
+  {% if scan.status == 'FAILED' %}<li class="current failed">Failed</li>{% endif %}
+</ol>
+
+{% if scan.status == 'FAILED' %}
+  <p class="alert">This scan failed: {{ scan.errorMessage or 'the worker stopped before finishing.' }} Start it again from <a href="{{ url_for('index') }}">New scan</a>.</p>
+{% elif scan.status != 'COMPLETE' %}
+  <p class="hint">Waiting for a worker. This page updates every 5 seconds.</p>
+{% endif %}
+
+{% if scan.status == 'COMPLETE' %}
+<div class="counts">
+  <div class="count high"><strong>{{ scan|sev('HIGH') }}</strong> high</div>
+  <div class="count medium"><strong>{{ scan|sev('MEDIUM') }}</strong> medium</div>
+  <div class="count low"><strong>{{ scan|sev('LOW') }}</strong> low</div>
+</div>
+  {% if report_json %}
+  <h2>Full report</h2>
+  <pre class="report">{{ report_json }}</pre>
+  {% else %}
+  <p class="hint">The report file could not be loaded from storage.</p>
+  {% endif %}
+{% endif %}
+
+<dl class="meta">
+  <dt>Scan ID</dt><dd class="mono">{{ scan.scanId }}</dd>
+  <dt>Team</dt><dd>{{ scan.teamId }}</dd>
+  <dt>Created</dt><dd>{{ scan.createdAt }}</dd>
+  <dt>Last update</dt><dd>{{ scan.updatedAt }}</dd>
+</dl>
+{% endblock %}

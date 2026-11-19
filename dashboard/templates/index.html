@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Check code or a live API</h1>
+<p class="lede">Code checks look for hardcoded secrets, injection risks and weak crypto. API tests probe a running endpoint for missing auth, injection and missing security headers.</p>
+
+{% if error %}<p class="alert" role="alert">{{ error }}</p>{% endif %}
+
+<div class="split">
+  <section class="panel">
+    <h2>Check JavaScript code</h2>
+    <form method="post" action="{{ url_for('submit_sast') }}">
+      <input type="hidden" name="teamId" value="{{ team }}">
+      <label for="code">Paste a snippet</label>
+      <textarea id="code" name="code" rows="10" spellcheck="false" placeholder="const password = &quot;admin123&quot;;"></textarea>
+      <button type="submit">Check code</button>
+    </form>
+    <div class="or">or upload a whole project</div>
+    <form id="zip-form">
+      <label for="zip">Project zip</label>
+      <input id="zip" type="file" accept=".zip,application/zip">
+      <button type="submit" class="secondary">Upload and check</button>
+      <p id="zip-status" class="hint" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Test a live API</h2>
+    <form method="post" action="{{ url_for('submit_pentest') }}">
+      <input type="hidden" name="teamId" value="{{ team }}">
+      <label for="targetUrl">API endpoint URL</label>
+      <input id="targetUrl" name="targetUrl" type="url" required placeholder="https://staging.example.com/api/users">
+      <p class="hint">Only test APIs your team owns. Private and internal addresses are blocked.</p>
+      <button type="submit">Start API test</button>
+    </form>
+  </section>
+</div>
+<script>window.TEAM_ID = {{ team|tojson }};</script>
+<script src="{{ url_for('static', filename='upload.js') }}"></script>
+{% endblock %}

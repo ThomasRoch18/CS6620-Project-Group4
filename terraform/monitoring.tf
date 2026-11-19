@@ -76,7 +76,7 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "dlq_messages" {
-  for_each = local.dead_letter_queues
+  for_each = toset(["sast", "pentest"])
 
   alarm_name          = "${var.project_name}-${each.key}-dlq-messages"
   alarm_description   = "Messages detected in ${each.key} DLQ"
@@ -90,7 +90,7 @@ resource "aws_cloudwatch_metric_alarm" "dlq_messages" {
   period      = 300
 
   dimensions = {
-    QueueName = each.value
+    QueueName = "${var.project_name}-${each.key}-dlq"
   }
 
   treat_missing_data = "notBreaching"
@@ -99,3 +99,4 @@ resource "aws_cloudwatch_metric_alarm" "dlq_messages" {
     aws_sns_topic.scan_notifications.arn
   ]
 }
+

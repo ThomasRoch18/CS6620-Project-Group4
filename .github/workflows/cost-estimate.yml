@@ -27,4 +27,4 @@ jobs:
           install-only: true
 
       - name: Estimate Terraform costs
-        run: c3x estimate --path terraform
+        run: c3x estimate --path terraform --show-skipped

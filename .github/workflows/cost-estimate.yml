@@ -1,0 +1,30 @@
+name: Terraform Cost Estimate
+
+on:
+  push:
+    paths:
+      - 'terraform/**'
+      - '.c3x.toml'
+      - '.github/workflows/cost-estimate.yml'
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.c3x.toml'
+      - '.github/workflows/cost-estimate.yml'
+  workflow_dispatch:
+
+jobs:
+  cost-estimate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install C3X
+        uses: c3xdev/c3x@v0
+        with:
+          install-only: true
+
+      - name: Estimate Terraform costs
+        run: c3x estimate --path terraform

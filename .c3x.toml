@@ -1,0 +1,20 @@
+# C3X Cost Estimation Configuration
+
+# AWS region
+region = "us-east-1"
+
+# Currency for cost estimates
+currency = "USD"
+
+# Default report format
+format = "markdown"
+
+# Monthly infrastructure budget (USD) (Not final, placeholder value)
+budget = 100.0
+
+# Maximum allowed monthly cost increase (Not final, placeholder value)
+budget_delta = 25.0
+
+# Pricing API
+[pricing]
+endpoint = "https://pricing.c3x.dev/graphql"

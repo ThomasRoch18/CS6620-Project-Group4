@@ -33,7 +33,7 @@ data "aws_availability_zones" "available" {
 
 # Public Subnets
 resource "aws_subnet" "public" {
-  count = 1
+  count = 2
 
   vpc_id                  = aws_vpc.main.id
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, count.index)
@@ -106,7 +106,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count = 1
+  count = 2
 
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id

@@ -12,7 +12,9 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-.tfvars
+*.tfvars
+# Generated Lambda placeholder packages
+terraform/*-placeholder.zip
 
 # AWS credentials and secrets
 .aws/

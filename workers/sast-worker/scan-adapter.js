@@ -1,5 +1,3 @@
-// The ONLY file that calls the provided SAST code (sast/backend/scanner.js).
-// If the function names in scanner.js are different, fix them here.
 
 const path = require("path");
 const { pathToFileURL } = require("url");
@@ -9,7 +7,7 @@ const { pathToFileURL } = require("url");
 const scannerPath = process.env.SAST_SCANNER_PATH || "./sast/scanner";
 
 // The provided scanner is an ES module, so it has to be loaded with
-// import() instead of require(). We load it once and reuse it.
+// import() instead of require()
 let scannerPromise;
 function loadScanner() {
   if (!scannerPromise) {

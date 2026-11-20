@@ -2,15 +2,27 @@
 // If the function names in scanner.js are different, fix them here.
 
 const path = require("path");
+const { pathToFileURL } = require("url");
 
 // In the Docker image the provided code is copied to ./sast.
 // On your laptop, set SAST_SCANNER_PATH=../../sast/backend/scanner
 const scannerPath = process.env.SAST_SCANNER_PATH || "./sast/scanner";
-const scanner = require(path.resolve(__dirname, scannerPath));
+
+// The provided scanner is an ES module, so it has to be loaded with
+// import() instead of require(). We load it once and reuse it.
+let scannerPromise;
+function loadScanner() {
+  if (!scannerPromise) {
+    const file = path.resolve(__dirname, scannerPath + ".js");
+    scannerPromise = import(pathToFileURL(file).href);
+  }
+  return scannerPromise;
+}
 
 // Runs the provided scanner on a code snippet.
 async function scanCode(code) {
-  return scanner.scanCode(code); // TODO: check the real function name
+  const scanner = await loadScanner();
+  return scanner.scanCode(code);
 }
 
 // Counts findings by severity, e.g. { HIGH: 2, MEDIUM: 1, LOW: 0 }.
